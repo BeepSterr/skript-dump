@@ -1,0 +1,9 @@
+
+command /editsign <number> <text>:
+    description: set sign content
+    usage: /velocity <number> <text>
+    permission: tc.yeet
+    permission message: Unknown Command type '/help' to learn more.
+    executable by: players
+    trigger:
+        set line arg-1 of targeted block to arg-2
