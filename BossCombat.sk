@@ -1,0 +1,40 @@
+on damage:
+    if attacker is a player:
+        if name of victim contains "BOSS":
+        
+            set {_player} to attacker
+            
+            if {ct.%attacker%.timer} is below 10:
+                add 4 to {ct.%attacker%.timer}
+            
+            if {ct.%attacker%.tag} is false:
+
+                set {ct.%attacker%.fly} to flight mode of attacker
+                
+                if {ct.%attacker%.fly} is true:
+                    set flight mode of attacker to false
+                
+                send "&8Combat » &cYou are now in combat." to attacker
+                set {ct.%attacker%.tag} to true
+
+on join:
+    set {ct.%player%.tag} to false
+    set {ct.%player%.fly} to flight mode of player
+    set {ct.%player%.timer} to 0
+    
+every second:
+    loop all players:
+        if {ct.%loop-player%.timer} is above 0:
+            remove 1 from {ct.%loop-player%.timer}
+            set action bar of loop-player to "&7In Combat for &e&l%{ct.%loop-player%.timer}% &r&7Seconds"
+        else:
+            if {ct.%loop-player%.tag} is true:
+                set {ct.%loop-player%.tag} to false
+                send "&8Combat » &aYou are no longer in combat." to loop-player
+                if {ct.%loop-player%.fly} is true:
+                    set flight mode of loop-player to true
+                    
+on command:
+    if {ct.%player%.tag} is true:
+        send "&8Combat » &cCombat Tagged! You can't use commands right now!"
+        cancel event
