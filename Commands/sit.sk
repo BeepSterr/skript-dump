@@ -1,0 +1,41 @@
+Command /sit:
+
+    description: Launches you to are random place in the world.
+    permission: command.sit
+    permission message: "&cYou don't have the right rank to use this!"
+
+    trigger:
+
+        loop all entities in radius 1.1 around location of block below player:
+            if loop-entity is a pig:
+                send "&cThere is a sitting person too close to you. (It might even be you!)" to player
+                stop
+
+        set {_spawnloc} to location at x coordinate of player, y coordinate of player - 0.9, z coordinate of player in world of player
+
+        spawn 1 pig at {_spawnloc}     
+        set name of last spawned entity to "&eSeat"
+        set {_pig} to last spawned entity
+
+        set name of {_pig} to "&eSeat"
+        set health of {_pig} to 1
+
+        add "{NoAI: 1}" To nbt of {_pig}
+        add "{NoGravity: 1}" To nbt of {_pig}
+        add "{Invulnerable: 1}" To nbt of {_pig}
+        add "{Silent: 1}" To nbt of {_pig}
+        add "{Health: 1}" To nbt of {_pig}
+
+        apply potion of invisibility without any particles to {_pig} for 99999 seconds
+        make the player ride {_pig}
+
+on death:
+    if name of entity is "&eSeat":
+        clear drops
+
+on vehicle exit:
+    loop all entities in radius 1 around player:   
+        name of loop-entity is "&eSeat":
+            kill loop-entity
+            wait 2 ticks
+            teleport player to location at x coordinate of player, y coordinate of player + 0.2, z coordinate of player in world of player
